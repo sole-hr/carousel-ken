@@ -1,0 +1,257 @@
+/* <--------- CAROUSEL STYLE ---------> */
+
+body {
+    font-family: "Helvetice Neue", Helvetica, Arial, sans-serif;
+    color: rgb(17, 17,17);
+    font-size: 14px
+}
+
+h2 {
+    font-size: 18px;
+    line-height: 1.33333;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-align: left;
+    color: #111111;
+    padding: 20px 48px
+}
+
+.shoe {
+    line-height: 0.8;
+    font-size: 12px;
+    color: #111111;
+    cursor: pointer;
+    margin: 0px, 5px, 0px, 5px
+}
+
+.shoe-name {
+    font-size: 14px;
+    color: #111111;
+    font-weight: bold;
+    white-space: normal !important
+}
+
+.colors {
+    font-size: 12px;
+    color: #111111;
+    width: 95%;
+    padding: 10px 0px 10px 0px;
+    box-shadow: rgb(221, 221, 221) 0px -1px 0px 0px inset;
+}
+
+.category, .price {
+    font-size: 14px;
+    color: #8D8D8D
+}
+
+img {
+    height: 85%;
+    width: 95%;
+    overflow: hidden
+}
+
+.padding {
+    padding: 60px
+}
+
+
+/* <--------- ARROW STYLE ---------> */
+
+.slick-prev {
+    left: 3% !important;
+    z-index: 1;
+}
+
+.slick-next {
+    right: 3% !important;
+    z-index: 1;
+}
+
+.nextArrow, .prevArrow {
+    height: 12px;
+    width: auto;
+    display: flex
+}
+.slick-arrow:hover {
+  background-color: white !important
+}
+
+#carousel > div > div:nth-child(2) > div > div.slick-arrow.slick-next::before {
+    display: none !important;
+}
+#carousel > div > div:nth-child(2) > div > div.slick-arrow.slick-prev::before {
+    display: none !important;
+}
+
+/* <--------- FOOTER STYLE ---------> */
+
+.nav-footer {
+    color: #fff;
+    background-color: rgb(17, 17,17);
+}
+
+.footer {
+    color: #fff;
+    background-color: rgb(17, 17,17);
+    margin: 0px 20px 0px;
+    padding-top: 40px
+}
+
+
+.subfooters {
+    display: flex;
+    border-top: 1px solid #222;
+    align-items: center
+}
+
+.main-footer {
+    display: flex;
+    padding-bottom: 8px
+}
+
+.main-link {
+    color: white;
+    text-transform: uppercase;
+    font-size: 12px;
+    margin: 0px 0px 7px;
+    cursor: pointer
+}
+
+.minor-link {
+    color: #7E7E7E;
+    font-size: 10px;
+    margin: 0px 0px 7px;
+    cursor: pointer
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0px
+}
+
+.social {
+    display: inline-flex;
+    justify-content: flex-end
+}
+
+.guides, .copywright {
+    padding: 5px 0px 5px 0px
+}
+
+.guides-link, .copywright-link {
+    display: inline-flex;
+    padding: 5px;
+    font-size: 10px;
+    color: #7E7E7E;
+    margin: 0px 0px 3px;
+    cursor: pointer
+}
+
+.col {
+    border-top: 1px solid #222;
+}
+
+.guides {
+    display: inline-flex;
+    justify-content: flex-end;
+    width: 100%
+}
+
+.copywright {
+    display: inline-flex;
+    justify-content: flex-start !important;
+}
+
+#us {
+    color: white
+}
+
+#carousel > div > div.nav-footer > div > div:nth-child(2) > div > div > div:nth-child(1) {
+    display: inline-flex;
+    justify-content: flex-start !important;
+}
+
+.social-link:hover, .guides-link:hover, .minor-link:hover {
+    color: white
+}
+
+@media (max-width: 768px) {
+    .social {
+        display: inline-flex;
+        justify-content: flex-start;
+        margin-top: 20px;
+    }
+    .col {
+        border-top: 1px solid black;
+        display: inline-flex;
+        flex-direction: column;
+        width: 100%
+    }
+    .guides-link {
+        display: inline-flex;
+        flex-direction: column;
+        width: 100%
+    }
+    .subfooters {
+        display: inline-flex;
+        flex-direction: column;
+        width: 100%
+    }
+    li.social-link {
+        margin-right: 20px;
+        margin-left: 0
+    }
+    .guides {
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: flex-start
+    }
+    .copywright {
+        flex-direction: column;
+        margin-top: 20px
+    }
+    .subfooters {
+        border-top: none;
+    }
+}
+
+/* <--------- SOCIAL FOOTER STYLE ---------> */
+
+.social-link {
+    display: inline-flex;
+    flex-direction: row;
+    padding: 0px 3px 0px 3px;
+    background-color: #7E7E7E;
+    cursor: pointer;
+    border-radius: 50%;
+    height: 21px;
+    width: 21px;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px
+}
+
+.youtube, .instagram, .twitter, .facebook {
+    height: 14px;
+    width: auto;
+    display:inline-block;
+    color: black
+}
+
+.social-link:hover {
+    background-color: white;
+}
+
+/* <--------- COPYWRIGHT FOOTER STYLE ---------> */
+
+.flag-footer {
+    height: 15px;
+    width: 17px;
+    padding-right: 5px;
+    margin-right: 0px;
+    margin-left: 0px
+}
+
+/* <--------- COLLAPSE MENUS STYLE ---------> */
