@@ -8,17 +8,18 @@
     "node": ">=6.13.0"
   },
   "scripts": {
-    "start": "nodemon ./server/index.js",
+    "server-dev": "nodemon ./server/index.js",
     "react-dev": "webpack -d --watch",
     "deploy": "pm2 deploy ecosystem.config.js production --force",
     "restart": "pm2 startOrRestart ecosystem.config.js"
   },
   "dependencies": {
     "@babel/cli": "^7.4.4",
-    "axios": "^0.18.0",
+    "axios": "^0.19.0",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.3.1",
     "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
     "express": "^4.17.0",
     "jquery": "^3.4.1",
     "mongoose": "^5.5.8",
