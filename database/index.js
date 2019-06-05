@@ -33,7 +33,7 @@ let save = data => {
 
 //save(shoes);
 
-let findAll = (obj, callback) => {
+const findAll = (obj, callback) => {
   CarouselItem.find(obj, (err, shoes) => {
     if (err) {
       console.log("error in db retrieving repos: ", err);
@@ -42,8 +42,10 @@ let findAll = (obj, callback) => {
   });
 };
 
-let findOne = (conditions, callback) => {
-  CarouselItem.findOne(conditions)
+// METHODS FOR SINGLE-ITEM
+
+const findOne = (sku, callback) => {
+  CarouselItem.findOne({ sku })
     .then(resultItem => {
       callback(resultItem);
     })
@@ -52,4 +54,14 @@ let findOne = (conditions, callback) => {
     });
 };
 
-module.exports = { save, findOne, findAll };
+const updateOne = (sku, valuesToUpdate, callback) => {
+  CarouselItem.findOneAndUpdate({ sku }, valuesToUpdate)
+    .then(updatedItem => {
+      callback(updatedItem);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+module.exports = { save, findOne, updateOne, findAll };

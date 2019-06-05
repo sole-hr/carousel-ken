@@ -38,8 +38,7 @@ app.get(`/shoes`, (req, res) => {
 // GET One Shoe Item
 app.get("/shoe/:sku", (req, res) => {
   const sku = req.params.sku;
-  console.log(sku);
-  db.findOne({ sku }, results => {
+  db.findOne(sku, results => {
     res.json(results);
   });
 });
