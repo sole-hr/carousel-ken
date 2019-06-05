@@ -19,22 +19,22 @@ let carouselSchema = mongoose.Schema({
   images: [String]
 });
 
-let Carousel = mongoose.model("Carousel", carouselSchema);
+let CarouselItem = mongoose.model("Carousel", carouselSchema);
 
 let save = data => {
-  Carousel.insertMany(data, err => {
+  CarouselItem.insertMany(data, err => {
     if (err) {
       console.log("insertion error: ", err);
     }
     console.log("attempting to update");
-    Carousel.update(data, { upsert: true });
+    CarouselITem.update(data, { upsert: true });
   });
 };
 
 //save(shoes);
 
 let findAll = (obj, callback) => {
-  Carousel.find(obj, (err, shoes) => {
+  CarouselItem.find(obj, (err, shoes) => {
     if (err) {
       console.log("error in db retrieving repos: ", err);
     }
@@ -42,4 +42,14 @@ let findAll = (obj, callback) => {
   });
 };
 
-module.exports = { save, findAll };
+let findOne = (conditions, callback) => {
+  CarouselItem.findOne(conditions)
+    .then(resultItem => {
+      callback(resultItem);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+module.exports = { save, findOne, findAll };

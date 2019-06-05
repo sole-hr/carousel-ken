@@ -33,7 +33,25 @@ app.get(`/shoes`, (req, res) => {
   });
 });
 
-getRandomShoe = array => {
+// Example SKU: 880563-010
+
+// GET One Shoe Item
+app.get("/shoe/:sku", (req, res) => {
+  const sku = req.params.sku;
+  console.log(sku);
+  db.findOne({ sku }, results => {
+    res.json(results);
+  });
+});
+
+app.post("/shoe/:sku", (req, res) => {});
+
+app.put("/shoe/:sku", (req, res) => {});
+
+app.delete("/shoe/:sku", (req, res) => {});
+
+// Helper Functions
+const getRandomShoe = array => {
   let randomIndex = Math.floor(Math.random() * array.length);
   return randomIndex;
 };

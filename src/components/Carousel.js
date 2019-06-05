@@ -20,6 +20,7 @@ class Carousel extends React.Component {
   componentDidMount() {
     Axios.get(`${process.env.API_URL}/shoes`)
       .then(response => {
+        console.log(response.data.length);
         this.setState({
           shoes: response.data
         });
