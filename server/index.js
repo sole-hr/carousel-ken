@@ -13,26 +13,26 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // enter routes below
-// app.get(`/shoes`, (req, res) => {
-  // db.findAll((err, shoes) => {
-  //   if (err) {
-  //     console.log("error returning shoes from db", err);
-  //     res.statusCode = 400;
-  //     res.end();
-  //   } else {
-  //     let shoeCount = 0;
-  //     let shoeArray = [];
-  //     while (shoeCount < 12) {
-  //       let randomIndex = getRandomShoe(shoes);
-  //       shoeArray.push(shoes[randomIndex]);
-  //       shoeCount++;
-  //     }
-  //     console.log("success getting shoes from db");
-  //     res.statusCode = 200;
-  //     res.send(shoeArray);
-  //   }
-  // });
-// });
+app.get(`/shoes`, (req, res) => {
+  db.findAll((err, shoes) => {
+    if (err) {
+      console.log("error returning shoes from db", err);
+      res.statusCode = 400;
+      res.end();
+    } else {
+      let shoeCount = 0;
+      let shoeArray = [];
+      while (shoeCount < 12) {
+        let randomIndex = getRandomShoe(shoes);
+        shoeArray.push(shoes[randomIndex]);
+        shoeCount++;
+      }
+      console.log("success getting shoes from db");
+      res.statusCode = 200;
+      res.send(shoeArray);
+    }
+  });
+});
 
 getRandomShoe = array => {
   let randomIndex = Math.floor(Math.random() * array.length);

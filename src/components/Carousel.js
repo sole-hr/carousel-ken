@@ -19,7 +19,7 @@ class Carousel extends React.Component {
     }
 
     componentDidMount() {
-        Axios.get('http://ec2-3-88-248-205.compute-1.amazonaws.com/shoes')
+        Axios.get(`${process.env.API_URL}/shoes`)
             .then((response) => {
                 this.setState({
                     shoes: response.data
