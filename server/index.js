@@ -27,7 +27,6 @@ app.get(`/shoes`, (req, res) => {
         shoeArray.push(shoes[randomIndex]);
         shoeCount++;
       }
-      console.log("success getting shoes from db");
       res.statusCode = 200;
       res.send(shoeArray);
     }
