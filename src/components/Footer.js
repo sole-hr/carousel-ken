@@ -1,6 +1,6 @@
 import React from 'react';
-// import MainFooter from './MainFooter';
-// import SubFooter from './Subfooter';
+import MainFooter from './MainFooter';
+import SubFooter from './Subfooter';
 
 const Footer = (props) => {
     return (

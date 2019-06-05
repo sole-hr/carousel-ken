@@ -1,6 +1,6 @@
 import React from 'react';
-// import Copywright from './Copywright';
-// import Guides from './Guides';
+import Copywright from './Copywright';
+import Guides from './Guides';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';

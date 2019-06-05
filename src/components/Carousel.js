@@ -1,8 +1,8 @@
 import React from 'react';
 import Slider from 'react-slick';
 import "./main.css";
-// import CarouselItem from './CarouselItem';
-// import Footer from './Footer';
+import CarouselItem from './CarouselItem';
+import Footer from './Footer';
 import Axios from 'axios';
 
 class Carousel extends React.Component {
