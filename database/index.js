@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 //const shoes = require('../../shoe-data-generator/shoeData.json');
 
 mongoose.connect(
-  `mongodb+srv://${dbinfo.user}:${
-    dbinfo.pw
+  `mongodb+srv://${process.env.DB_USER}:${
+    process.env.DB_PW
   }@davidguenther-pdt5c.mongodb.net/test?retryWrites=true`,
   { useNewUrlParser: true }
 );

@@ -1,4 +1,4 @@
-const dotenv = require("dotenv");
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const db = require("../database");
@@ -6,7 +6,6 @@ const cors = require("cors");
 
 const app = express();
 
-app.use(dotenv());
 app.use(cors());
 app.use(express.static("public"));
 
@@ -15,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // enter routes below
 
-app.get("/shoes", (req, res) => {
+app.get(`/shoes`, (req, res) => {
   db.findAll((err, shoes) => {
     if (err) {
       console.log("error returning shoes from db", err);
