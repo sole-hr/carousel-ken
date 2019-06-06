@@ -37,15 +37,23 @@ app.get(`/shoes`, (req, res) => {
 
 // GET One Shoe Item
 app.get("/shoe/:sku", (req, res) => {
-  const sku = req.params.sku;
-  db.findOne(sku, results => {
+  const { sku } = req.params;
+  db.findOne((sku, results) => {
     res.json(results);
   });
 });
 
-app.post("/shoe/:sku", (req, res) => {});
+// UPDATE One Shoe Item using SKU
+app.put("/shoe/:sku", (req, res) => {
+  // const { sku } = req.params;
+  // const valuesToUpdate = req.body;
+  // db.updateOne(sku, valuesToUpdate, response => {
+  //   console.log(response);
+  // });
+  res.end();
+});
 
-app.put("/shoe/:sku", (req, res) => {});
+app.post("/shoe/:sku", (req, res) => {});
 
 app.delete("/shoe/:sku", (req, res) => {});
 
