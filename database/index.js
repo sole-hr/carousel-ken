@@ -54,6 +54,16 @@ const findOne = (sku, callback) => {
     });
 };
 
+const createOne = (shoeObj, callback) => {
+  CarouselItem.create(shoeObj)
+    .then(item => {
+      callback(item);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
 const updateOne = (sku, valuesToUpdate, callback) => {
   CarouselItem.findOneAndUpdate({ sku }, valuesToUpdate)
     .then(updatedItem => {
@@ -64,4 +74,13 @@ const updateOne = (sku, valuesToUpdate, callback) => {
     });
 };
 
-module.exports = { save, findOne, updateOne, findAll };
+const deleteOne = (sku, callback) => {
+  CarouselItem.findOneAndDelete({ sku })
+    .then(deletedItem => {
+      callback(deletedItem);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+module.exports = { save, createOne, findOne, updateOne, deleteOne, findAll };

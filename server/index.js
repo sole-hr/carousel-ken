@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const db = require("../database");
 const cors = require("cors");
+const idGen = require("shortid");
 
 const app = express();
 
@@ -47,14 +48,27 @@ app.get("/shoe/:sku", (req, res) => {
 app.put("/shoe/:sku", (req, res) => {
   const { sku } = req.params;
   const valuesToUpdate = req.body;
-  db.updateOne(sku, valuesToUpdate, response => {
+
+  db.updateOne(sku, valuesToUpdate, updatedItem => {
     res.json({ sku: sku, updatedValues: valuesToUpdate });
   });
 });
 
-app.post("/shoe/:sku", (req, res) => {});
+app.delete("/shoe/:sku", (req, res) => {
+  const { sku } = req.params;
+  db.deleteOne(sku, deletedItem => {
+    res.json({ deletedItem: deletedItem.sku });
+  });
+});
 
-app.delete("/shoe/:sku", (req, res) => {});
+app.post("/shoe/", (req, res) => {
+  const sku = idGen.generate(); // randomly generate a new SKU
+  const contentToAdd = req.body;
+  contentToAdd["sku"] = sku;
+  db.createOne(contentToAdd, item => {
+    res.send(contentToAdd);
+  });
+});
 
 // Helper Functions
 const getRandomShoe = array => {
