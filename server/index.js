@@ -38,19 +38,18 @@ app.get(`/shoes`, (req, res) => {
 // GET One Shoe Item
 app.get("/shoe/:sku", (req, res) => {
   const { sku } = req.params;
-  db.findOne((sku, results) => {
+  db.findOne(sku, results => {
     res.json(results);
   });
 });
 
 // UPDATE One Shoe Item using SKU
 app.put("/shoe/:sku", (req, res) => {
-  // const { sku } = req.params;
-  // const valuesToUpdate = req.body;
-  // db.updateOne(sku, valuesToUpdate, response => {
-  //   console.log(response);
-  // });
-  res.end();
+  const { sku } = req.params;
+  const valuesToUpdate = req.body;
+  db.updateOne(sku, valuesToUpdate, response => {
+    res.json({ sku: sku, updatedValues: valuesToUpdate });
+  });
 });
 
 app.post("/shoe/:sku", (req, res) => {});
