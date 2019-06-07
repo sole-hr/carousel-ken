@@ -34,18 +34,32 @@ app.get(`/shoes`, (req, res) => {
   });
 });
 
-// Example SKU: 880563-010
+// GET RELATED ITEMS FROM ONE SHOE
+app.get("/api/shoes/:sku", (req, res) => {
+  const sku = Number(req.params.sku);
+  // query database for specific shoe
+  db.findRelatedItems(sku, currentShoe => {
+    res.end();
+  });
+});
 
+// Example SKU: 880563-010
 // GET One Shoe Item
-app.get("/shoe/:sku", (req, res) => {
-  const { sku } = req.params;
-  db.findOne(sku, results => {
+app.get("/api/shoe/:sku", (req, res) => {
+  let { sku } = req.params;
+  sku = parseInt(sku);
+  // console.log(sku);
+  db.findOne(sku, (err, results) => {
+    if (err) {
+      console.error(err);
+    }
+    console.log(results);
     res.json(results);
   });
 });
 
 // UPDATE One Shoe Item using SKU
-app.put("/shoe/:sku", (req, res) => {
+app.put("/api/shoe/:sku", (req, res) => {
   const { sku } = req.params;
   const valuesToUpdate = req.body;
 
@@ -54,7 +68,7 @@ app.put("/shoe/:sku", (req, res) => {
   });
 });
 
-app.delete("/shoe/:sku", (req, res) => {
+app.delete("/api/shoe/:sku", (req, res) => {
   const { sku } = req.params;
   db.deleteOne(sku, deletedItem => {
     res.json({ deletedItem: deletedItem.sku });
