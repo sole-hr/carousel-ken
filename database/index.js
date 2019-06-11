@@ -3,37 +3,32 @@ const mongoose = require("mongoose");
 
 //const shoes = require('../../shoe-data-generator/shoeData.json');
 
-mongoose.connect(
-  `mongodb+srv://${process.env.DB_USER}:${
-    process.env.DB_PW
-  }@davidguenther-pdt5c.mongodb.net/test?retryWrites=true`,
-  { useNewUrlParser: true }
-);
+mongoose.connect(`mongodb://localhost/sdc`, { useNewUrlParser: true });
 
-let carouselSchema = mongoose.Schema({
-  productName: String,
-  sku: String,
-  category: String,
-  colors: [String],
-  price: Number,
-  images: [String]
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", () => {
+  console.log("we are connected to Mongo database!");
 });
 
-let CarouselItem = mongoose.model("Carousel", carouselSchema);
-
-let save = data => {
-  CarouselItem.insertMany(data, err => {
-    if (err) {
-      console.log("insertion error: ", err);
+let carouselSchema = mongoose.Schema({
+  currentSku: Number,
+  relatedShoes: [
+    {
+      itemSku: Number,
+      productName: String,
+      category: String,
+      price: String,
+      image: String
     }
-    console.log("attempting to update");
-    CarouselITem.update(data, { upsert: true });
-  });
-};
+  ]
+});
 
-//save(shoes);
+carouselSchema.index({ "currentSku": 1 });
 
-let findAll = (obj, callback) => {
+let CarouselItem = mongoose.model("Carousel", carouselSchema, "carousels");
+
+const findAll = (obj, callback) => {
   CarouselItem.find(obj, (err, shoes) => {
     if (err) {
       console.log("error in db retrieving repos: ", err);
@@ -42,14 +37,64 @@ let findAll = (obj, callback) => {
   });
 };
 
-let findOne = (conditions, callback) => {
-  CarouselItem.findOne(conditions)
-    .then(resultItem => {
-      callback(resultItem);
+///////////////////////////////////////////////////////////////////////////////////
+const findRelatedItems = (sku, callback) => {
+  CarouselItem.findOne({ currentSku: sku })
+    .then(currentShoe => {
+      callback(null, currentShoe);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+};
+
+const deleteRelatedItems = (sku, callback) => {
+  CarouselItem.findOneAndDelete({ currentSku: sku })
+    .then(deletedItem => {
+      callback(null, deletedItem);
     })
     .catch(err => {
       console.log(err);
     });
 };
 
-module.exports = { save, findOne, findAll };
+const createOne = (shoeObj, callback) => {
+  // get count
+  let newSku = null;
+  // CarouselItem.count({})
+  //   .then(count => {
+  //     newSku = count;
+  //   })
+  //   .then(() => {
+  //     CarouselItem.create(shoeObj);
+  //   });
+};
+
+const updateOne = (sku, valuesToUpdate, callback) => {
+  CarouselItem.findOneAndUpdate({ sku }, valuesToUpdate)
+    .then(updatedItem => {
+      callback(updatedItem);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+const deleteOne = (sku, callback) => {
+  CarouselItem.findOneAndDelete({ sku })
+    .then(deletedItem => {
+      callback(deletedItem);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+module.exports = {
+  createOne,
+  updateOne,
+  deleteOne,
+  findAll,
+  findRelatedItems,
+  deleteRelatedItems
+};

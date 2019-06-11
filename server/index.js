@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const db = require("../database");
 const cors = require("cors");
+const idGen = require("shortid");
 
 const app = express();
 
@@ -33,22 +34,37 @@ app.get(`/shoes`, (req, res) => {
   });
 });
 
-// Example SKU: 880563-010
-
-// GET One Shoe Item
-app.get("/shoe/:sku", (req, res) => {
-  const sku = req.params.sku;
-  console.log(sku);
-  db.findOne({ sku }, results => {
-    res.json(results);
+////////////////////////////////////////////////////////////
+// GET RELATED ITEMS FROM ONE SHOE
+app.get("/api/related-items/:sku", (req, res) => {
+  const sku = Number(req.params.sku);
+  db.findRelatedItems(sku, (err, relatedShoes) => {
+    res.json(relatedShoes);
   });
 });
 
-app.post("/shoe/:sku", (req, res) => {});
+app.delete("/api/related-items/:sku", (req, res) => {
+  const sku = Number(req.params.sku);
+  db.deleteRelatedItems(sku, (err, deletedRelatedShoes) => {
+    res.json({ "deleted-entry": deletedRelatedShoes });
+  });
+});
 
-app.put("/shoe/:sku", (req, res) => {});
+app.post("/api/related-items", (req, res) => {
+  db.createOne(req.body, console.log);
+});
+// UPDATE One Shoe Item using SKU
+app.put("/api/shoe/:sku", (req, res) => {
+  const { sku } = req.params;
+  const valuesToUpdate = req.body;
 
-app.delete("/shoe/:sku", (req, res) => {});
+  db.updateOne(sku, valuesToUpdate, updatedItem => {
+    res.json({ sku: sku, updatedValues: valuesToUpdate });
+  });
+});
+
+
+
 
 // Helper Functions
 const getRandomShoe = array => {
