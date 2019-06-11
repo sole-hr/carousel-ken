@@ -34,30 +34,25 @@ app.get(`/shoes`, (req, res) => {
   });
 });
 
+////////////////////////////////////////////////////////////
 // GET RELATED ITEMS FROM ONE SHOE
-app.get("/api/shoes/:sku", (req, res) => {
+app.get("/api/related-items/:sku", (req, res) => {
   const sku = Number(req.params.sku);
-  // query database for specific shoe
-  db.findRelatedItems(sku, currentShoe => {
-    res.end();
+  db.findRelatedItems(sku, (err, relatedShoes) => {
+    res.json(relatedShoes);
   });
 });
 
-// Example SKU: 880563-010
-// GET One Shoe Item
-app.get("/api/shoe/:sku", (req, res) => {
-  let { sku } = req.params;
-  sku = parseInt(sku);
-  // console.log(sku);
-  db.findOne(sku, (err, results) => {
-    if (err) {
-      console.error(err);
-    }
-    console.log(results);
-    res.json(results);
+app.delete("/api/related-items/:sku", (req, res) => {
+  const sku = Number(req.params.sku);
+  db.deleteRelatedItems(sku, (err, deletedRelatedShoes) => {
+    res.json({ "deleted-entry": deletedRelatedShoes });
   });
 });
 
+app.post("/api/related-items", (req, res) => {
+  db.createOne(req.body, console.log);
+});
 // UPDATE One Shoe Item using SKU
 app.put("/api/shoe/:sku", (req, res) => {
   const { sku } = req.params;
@@ -68,21 +63,8 @@ app.put("/api/shoe/:sku", (req, res) => {
   });
 });
 
-app.delete("/api/shoe/:sku", (req, res) => {
-  const { sku } = req.params;
-  db.deleteOne(sku, deletedItem => {
-    res.json({ deletedItem: deletedItem.sku });
-  });
-});
 
-app.post("/shoe/", (req, res) => {
-  const sku = idGen.generate(); // randomly generate a new SKU
-  const contentToAdd = req.body;
-  contentToAdd["sku"] = sku;
-  db.createOne(contentToAdd, item => {
-    res.send(contentToAdd);
-  });
-});
+
 
 // Helper Functions
 const getRandomShoe = array => {

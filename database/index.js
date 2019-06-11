@@ -12,16 +12,21 @@ db.once("open", () => {
 });
 
 let carouselSchema = mongoose.Schema({
-  productName: String,
-  sku: Number,
-  category: String,
-  color: String,
-  price: Number,
-  images: String,
-  relatedShoes: String
+  currentSku: Number,
+  relatedShoes: [
+    {
+      itemSku: Number,
+      productName: String,
+      category: String,
+      price: String,
+      image: String
+    }
+  ]
 });
 
-let CarouselItem = mongoose.model("Carousel", carouselSchema, "carousel");
+carouselSchema.index({ "currentSku": 1 });
+
+let CarouselItem = mongoose.model("Carousel", carouselSchema, "carousels");
 
 const findAll = (obj, callback) => {
   CarouselItem.find(obj, (err, shoes) => {
@@ -32,43 +37,37 @@ const findAll = (obj, callback) => {
   });
 };
 
+///////////////////////////////////////////////////////////////////////////////////
 const findRelatedItems = (sku, callback) => {
-  // retrieve specific entry
-  //   get related items
-  //   findAll entries and return that array of information
-  const relatedShoes = [];
-  CarouselItem.findOne({ sku: sku }).then(currentShoe => {
-    console.log(currentShoe);
-  });
-};
-
-// METHODS FOR SINGLE-ITEM
-const findOne = (sku, callback) => {
-  // CarouselItem.find({ sku: sku })
-  //   .then(resultItem => {
-  //     console.log(resultItem);
-  //     callback(resultItem);
-  //   })
-  //   .catch(err => {
-  //     console.log(err);
-  //   });
-  CarouselItem.findOne({ sku: sku }, (err, item) => {
-    if (err) {
+  CarouselItem.findOne({ currentSku: sku })
+    .then(currentShoe => {
+      callback(null, currentShoe);
+    })
+    .catch(err => {
       console.error(err);
-      callback(err);
-    }
-    callback(null, item);
-  });
+    });
 };
 
-const createOne = (shoeObj, callback) => {
-  CarouselItem.create(shoeObj)
-    .then(item => {
-      callback(item);
+const deleteRelatedItems = (sku, callback) => {
+  CarouselItem.findOneAndDelete({ currentSku: sku })
+    .then(deletedItem => {
+      callback(null, deletedItem);
     })
     .catch(err => {
       console.log(err);
     });
+};
+
+const createOne = (shoeObj, callback) => {
+  // get count
+  let newSku = null;
+  // CarouselItem.count({})
+  //   .then(count => {
+  //     newSku = count;
+  //   })
+  //   .then(() => {
+  //     CarouselItem.create(shoeObj);
+  //   });
 };
 
 const updateOne = (sku, valuesToUpdate, callback) => {
@@ -93,9 +92,9 @@ const deleteOne = (sku, callback) => {
 
 module.exports = {
   createOne,
-  findOne,
   updateOne,
   deleteOne,
   findAll,
-  findRelatedItems
+  findRelatedItems,
+  deleteRelatedItems
 };
