@@ -34,12 +34,27 @@ app.get(`/shoes`, (req, res) => {
   });
 });
 
-////////////////////////////////////////////////////////////
+// POST Single Shoe Item
+app.post("/api/item", (req, res) => {
+  const newShoe = req.body;
+  db.createOne(newShoe, (err, resultOfInsert) => {
+    res.json(resultOfInsert);
+  });
+});
+
 // GET RELATED ITEMS FROM ONE SHOE
 app.get("/api/related-items/:sku", (req, res) => {
   const sku = Number(req.params.sku);
   db.findRelatedItems(sku, (err, relatedShoes) => {
     res.json(relatedShoes);
+  });
+});
+
+// GET Single Shoe Item
+app.get("/api/item/:sku", (req, res) => {
+  const sku = Number(req.params.sku);
+  db.findOne(sku, (err, shoe) => {
+    res.json(shoe);
   });
 });
 
@@ -53,6 +68,7 @@ app.delete("/api/related-items/:sku", (req, res) => {
 app.post("/api/related-items", (req, res) => {
   db.createOne(req.body, console.log);
 });
+
 // UPDATE One Shoe Item using SKU
 app.put("/api/shoe/:sku", (req, res) => {
   const { sku } = req.params;
@@ -62,7 +78,6 @@ app.put("/api/shoe/:sku", (req, res) => {
     res.json({ sku: sku, updatedValues: valuesToUpdate });
   });
 });
-
 
 //
 
