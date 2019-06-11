@@ -11,14 +11,15 @@ const knex = require("knex")({
           done(err, conn);
         } else {
           console.log("CONNECTED TO PG");
+          done(err, conn);
         }
       });
     }
   }
 });
 
-knex("shoe")
-  .where("sku", 1)
+knex("related_shoe")
+  .where("main_sku", 500000)
   .then(result => {
     console.log(result);
   });
