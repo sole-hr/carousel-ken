@@ -1,5 +1,4 @@
 require("dotenv").config();
-const Promise = require("bluebird");
 const knex = require("knex")({
   client: "pg",
   connection: process.env.DATABASE_URL,
@@ -43,18 +42,11 @@ const createOne = (shoeObj, cb) => {
     });
 };
 
-const findOne = (sku, cb) => {
-  // return item from "shoe" table
-  knex("shoe")
-    .where({
-      sku: sku
-    })
-    .then(shoe => {
-      cb(null, shoe);
-    })
-    .catch(err => {
-      cb(err, null);
-    });
+// return item from "shoe" table
+const findOne = sku => {
+  return knex("shoe").where({
+    sku: sku
+  });
 };
 
 const findRelatedItems = (featuredItemSKU, cb) => {
