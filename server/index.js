@@ -1,4 +1,5 @@
 require("dotenv").config();
+// require("newrelic");
 const express = require("express");
 const bodyParser = require("body-parser");
 const db = require("../database");
@@ -9,9 +10,6 @@ const app = express();
 
 app.use(cors());
 app.use(express.static("public"));
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 // enter routes below
 app.get(`/shoes`, (req, res) => {
@@ -34,13 +32,31 @@ app.get(`/shoes`, (req, res) => {
   });
 });
 
-////////////////////////////////////////////////////////////
+// POST Single Shoe Item
+app.post("/api/item", bodyParser.json(), (req, res) => {
+  const newShoe = req.body;
+  db.createOne(newShoe, (err, resultOfInsert) => {
+    res.json(resultOfInsert);
+  });
+});
+
 // GET RELATED ITEMS FROM ONE SHOE
 app.get("/api/related-items/:sku", (req, res) => {
   const sku = Number(req.params.sku);
   db.findRelatedItems(sku, (err, relatedShoes) => {
     res.json(relatedShoes);
   });
+});
+
+// GET Single Shoe Item
+app.get("/api/item/:sku", (req, res) => {
+  db.findOne(Number(req.params.sku))
+    .then(shoe => {
+      res.json(shoe);
+    })
+    .catch(err => {
+      console.error(err);
+    });
 });
 
 app.delete("/api/related-items/:sku", (req, res) => {
@@ -53,6 +69,7 @@ app.delete("/api/related-items/:sku", (req, res) => {
 app.post("/api/related-items", (req, res) => {
   db.createOne(req.body, console.log);
 });
+
 // UPDATE One Shoe Item using SKU
 app.put("/api/shoe/:sku", (req, res) => {
   const { sku } = req.params;
@@ -63,8 +80,7 @@ app.put("/api/shoe/:sku", (req, res) => {
   });
 });
 
-
-
+//
 
 // Helper Functions
 const getRandomShoe = array => {

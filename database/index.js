@@ -1,100 +1,64 @@
-const mongoose = require("mongoose");
-// const dbinfo = require('./pw.js');
-
-//const shoes = require('../../shoe-data-generator/shoeData.json');
-
-mongoose.connect(`mongodb://localhost/sdc`, { useNewUrlParser: true });
-
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", () => {
-  console.log("we are connected to Mongo database!");
+require("dotenv").config();
+const knex = require("knex")({
+  client: "pg",
+  connection: process.env.DATABASE_URL,
+  pool: {
+    afterCreate: function(conn, done) {
+      // in this example we use pg driver's connection API
+      conn.query('SET timezone="UTC";', function(err) {
+        if (err) {
+          // first query failed, return error and don't try to make next query
+          done(err, conn);
+        } else {
+          console.log("CONNECTED TO PG");
+          done(err, conn);
+        }
+      });
+    }
+  }
 });
 
-let carouselSchema = mongoose.Schema({
-  currentSku: Number,
-  relatedShoes: [
-    {
-      itemSku: Number,
-      productName: String,
-      category: String,
-      price: String,
-      image: String
-    }
-  ]
-});
+const createOne = (shoeObj, cb) => {
+  // get highest index in db
+  let insertIndex = null;
 
-carouselSchema.index({ "currentSku": 1 });
-
-let CarouselItem = mongoose.model("Carousel", carouselSchema, "carousels");
-
-const findAll = (obj, callback) => {
-  CarouselItem.find(obj, (err, shoes) => {
-    if (err) {
-      console.log("error in db retrieving repos: ", err);
-    }
-    callback(null, shoes);
-  });
-};
-
-///////////////////////////////////////////////////////////////////////////////////
-const findRelatedItems = (sku, callback) => {
-  CarouselItem.findOne({ currentSku: sku })
-    .then(currentShoe => {
-      callback(null, currentShoe);
+  // EXECUTE PROMISES IN SERIES
+  const retrieveIndexPromise = knex("shoe")
+    .max("sku")
+    .then(highestIndex => {
+      [insertIndex] = highestIndex;
+      shoeObj["sku"] = insertIndex.max + 1;
+      knex("shoe")
+        .insert(shoeObj)
+        .then(resultOfInsert => {
+          cb(null, resultOfInsert);
+        })
+        .catch(err => {
+          cb(err, null);
+        });
     })
     .catch(err => {
       console.error(err);
     });
 };
 
-const deleteRelatedItems = (sku, callback) => {
-  CarouselItem.findOneAndDelete({ currentSku: sku })
-    .then(deletedItem => {
-      callback(null, deletedItem);
+// return item from "shoe" table
+const findOne = sku => {
+  return knex("shoe").where({
+    sku: sku
+  });
+};
+
+const findRelatedItems = (featuredItemSKU, cb) => {
+  knex("related_shoe")
+    .innerJoin("shoe", "related_shoe.main_sku", "=", "shoe.sku")
+    .where("main_sku", featuredItemSKU)
+    .then(relatedShoes => {
+      cb(null, relatedShoes);
     })
     .catch(err => {
-      console.log(err);
+      cb(err, null);
     });
 };
 
-const createOne = (shoeObj, callback) => {
-  // get count
-  let newSku = null;
-  // CarouselItem.count({})
-  //   .then(count => {
-  //     newSku = count;
-  //   })
-  //   .then(() => {
-  //     CarouselItem.create(shoeObj);
-  //   });
-};
-
-const updateOne = (sku, valuesToUpdate, callback) => {
-  CarouselItem.findOneAndUpdate({ sku }, valuesToUpdate)
-    .then(updatedItem => {
-      callback(updatedItem);
-    })
-    .catch(err => {
-      console.log(err);
-    });
-};
-
-const deleteOne = (sku, callback) => {
-  CarouselItem.findOneAndDelete({ sku })
-    .then(deletedItem => {
-      callback(deletedItem);
-    })
-    .catch(err => {
-      console.log(err);
-    });
-};
-
-module.exports = {
-  createOne,
-  updateOne,
-  deleteOne,
-  findAll,
-  findRelatedItems,
-  deleteRelatedItems
-};
+module.exports = { findOne, findRelatedItems, createOne };
