@@ -2,7 +2,7 @@ require("dotenv").config();
 const Promise = require("bluebird");
 const knex = require("knex")({
   client: "pg",
-  connection: process.env.POSTGRES_URL,
+  connection: process.env.DATABASE_URL,
   pool: {
     afterCreate: function(conn, done) {
       // in this example we use pg driver's connection API
