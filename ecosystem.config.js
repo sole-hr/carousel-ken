@@ -10,7 +10,7 @@ module.exports = {
             key: '~/.ssh/sdc-carousel.pem',
             ref: 'origin/master',
             repo: 'git@github.com:sole-hr/carousel-ken.git',
-            path: '/home/ubuntu/carousel',
+            path: '/home/ubuntu/carousel/source',
             'post-deploy': 'npm install && pm2 startOrRestart ecosystem.config.js'
         }
     }
