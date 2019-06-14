@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "carousel",
+      name: "carousel-test",
       script: "./server/index.js"
     }
   ],
