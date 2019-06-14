@@ -79,8 +79,6 @@ app.put("/api/shoe/:sku", (req, res) => {
   });
 });
 
-//
-
 // Helper Functions
 const getRandomShoe = array => {
   let randomIndex = Math.floor(Math.random() * array.length);
